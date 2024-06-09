@@ -1,0 +1,23 @@
+FROM python:3.11-slim
+# https://stackoverflow.com/a/77052183
+#FROM ubuntu:24.04
+#FROM pytorch/pytorch:latest
+
+ARG PIP_NO_CACHE_DIR=1
+
+RUN groupadd -r user && useradd -m --no-log-init -r -g user user \
+    && apt-get update && apt-get install python3 python3-pip python-is-python3 -y --no-install-recommends && apt-get clean && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /opt/app /inputs /outputs \
+    && chown user:user /opt/app /inputs /outputs #&& rm /usr/lib/python3.12/EXTERNALLY-MANAGED
+
+USER user
+WORKDIR /opt/app
+ENV PATH="/home/user/.local/bin:${PATH}"
+
+COPY --chown=user:user . .
+
+RUN python -m pip install --user -U pip && python -m pip install --user pip-tools \
+    && pip install numpy==1.26.4 openvino==2024.0.0 opencv-python-headless==4.9.0.80
+
+# FROM scratch
+# COPY --from=base / /
