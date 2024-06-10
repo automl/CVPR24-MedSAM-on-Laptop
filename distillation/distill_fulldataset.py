@@ -33,6 +33,10 @@ parser.add_argument(
     help="Path to the npy data root."
 )
 parser.add_argument(
+    "-datacsv", type=str, default="fulldataset.csv",
+    help="csv file containing all files in the dataset"
+)
+parser.add_argument(
     "-data_subset", type=str, default="",
     help="glob pattern for data subset, e.g. * or *Fundus*', multiple ones separated by |"
 )
@@ -111,6 +115,7 @@ seg_loss_weight = args.seg_loss_weight
 ce_loss_weight = args.ce_loss_weight
 do_sancheck = args.sanity_check
 checkpoint = args.resume
+datacsv = args.datacsv
 
 makedirs(work_dir, exist_ok=True)
 
@@ -397,7 +402,7 @@ lr_scheduler = optim.lr_scheduler.ReduceLROnPlateau(
 )
 iou_loss = nn.MSELoss(reduction='mean')
 # %%
-train_dataset = NpzDataset(data_root=data_root,filter_csv="fulldataset.csv", data_aug=True)
+train_dataset = NpzDataset(data_root=data_root,filter_csv=datacsv, data_aug=True)
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers, pin_memory=True)
 
 if checkpoint and isfile(checkpoint):
