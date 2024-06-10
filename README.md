@@ -32,22 +32,22 @@ We applied [this patch](https://github.com/facebookresearch/segment-anything/iss
 
 ![training visualization](imgs/training.png)
 
-The extract number of epochs for steps 1-3 and the data subsets used are listed in the table below. Make sure to use different workdirs for distillation, general finetuning and each subset finetuning run. Use the exact filenames from the table.
-For XRay use `-datacsv train.csv` with `distill_fulldataset.py` and `finetune_npz_devit_fulldataset.py`, for all other models use the default (which is fulldataset.csv).
+The exact number of epochs for steps 1-3 and the data subsets used are listed in the table below. Make sure to use different workdirs for distillation, general finetuning and each subset finetuning run. Use the exact filenames from the table.
+For XRay use `-datacsv train.csv` with `distill_fulldataset.py` and `finetune_npz_devit_fulldataset.py`, for all other models use the default (which is fulldataset.csv). Provide `-nopretrain` **only** for XRay and Microscopy when running `distill_fulldataset.py`.
 
 | Model Name | CT | 3D | XRay | Dermoscopy | Endoscopy | Fundus | Microscopy | OCT | Mammography |
 |---------------------------|----|----|-------|------------|-----------|--------|------------|-----|-------------|
 | Knowledge Distillation Epochs    | 24 | 24 | 20    | 24         | 24        | 24     | 20         | 24  | 24          |
 | General Fine-Tuning Epochs       | 24 | 24 | 46    | 24         | 0         | 24     | 20         | 24  | 24          |
 | Data-Aware Fine-Tuning Epochs    | 4  | 3  | 0     | 0          | 0         | 24     | 50         | 24  | 24          |
-| Data Subsets   | CT | CT&#124;MR&#124;PET | - | - | - | Fundus | Microscopy | OCT | Mammo |
+| Data Subsets   | CT | CT&#124;MR&#124;PET | - | - | - | Fundus | Microscopy | OCT | Mamm |
 
 
-1. `cd distill` and use `python distill_fulldataset.py -num_epochs <num_epochs> -batch_size 7 -device cuda -work_dir <path_to_work_dir> -resume <path_to_work_dir>/medsam_lite_latest.pth -data_root <path_to_data> -pretrained_checkpoint <path_to_l0_checkpoint>` to distill the TinyViT in LiteMedSAM to EfficientViT, use `python modelmerge.py <path_to_work_dir>/medsam_lite_latest.pth <path_to_weights>` to create weights for EfficientViT-SAM by using the distilled EfficientViT image encoder checkpoint and copying the prompt encoder and mask decoder from LiteMedSAM
-2. `cd ..` then fine tune our the model from step 3 on all the data by using `python finetune_npz_devit_fulldataset.py -pretrained_checkpoint <path_to_weights> -num_epochs <num_epochs> -batch_size 96 -device cuda -work_dir <path_to_work_dir> -resume <path_to_work_dir>/medsam_lite_latest.pth -data_root <path_to_data>`, use `python extract_evit.py <path_to_work_dir>/medsam_lite_latest.pth <path_to_weights>` to extract the weights from the latest training checkpoint afterwards
-3. fine tune our model from step 3 on different subsets of the data, depending on the modality, by using `finetune_npz_devit_fulldataset.py` (or `finetune_npz_devit_fulldataset3D.py` for 3D modalities) and providing `-data_subset` (e.g. `-data_subset "CT|MR|PET"` or `-data_subset "Dermoscopy"`), afterwards use `python extract_evit.py <path_to_work_dir>/medsam_lite_latest.pth devit/models/<model_name>.pth` to extract the weights from the checkpoints
-4. convert PyTorch model to ONNX by putting all the weights from step 3 in `devit/models/` and running `cd devit && python export_onnx.py`
-5. convert ONNX to OpenVINO IR via `python onnx2openvino.py`, afterwards `mv openvinomodels .. && cd ..`
+1. use `python distill_fulldataset.py -num_epochs <num_epochs> -batch_size 7 -device cuda -work_dir <path_to_work_dir> -resume <path_to_work_dir>/medsam_lite_latest.pth -data_root <path_to_data> -pretrained_checkpoint <path_to_l0_checkpoint>` to distill the TinyViT in LiteMedSAM to EfficientViT, use `python modelmerge.py <path_to_work_dir>/medsam_lite_latest.pth <path_to_weights>` to create weights for EfficientViT-SAM by using the distilled EfficientViT image encoder checkpoint and copying the prompt encoder and mask decoder from LiteMedSAM
+2. fine tune our the model from step 3 on all the data by using `python finetune_npz_devit_fulldataset.py -pretrained_checkpoint <path_to_weights> -num_epochs <num_epochs> -batch_size 96 -device cuda -work_dir <path_to_work_dir> -resume <path_to_work_dir>/medsam_lite_latest.pth -data_root <path_to_data>`, use `python extract_evit.py <path_to_work_dir>/medsam_lite_latest.pth <path_to_weights>` to extract the weights from the latest training checkpoint afterwards
+3. fine tune our model from step 3 on different subsets of the data, depending on the modality, by using `finetune_npz_devit_fulldataset.py` (`finetune_npz_devit_fulldataset3D.py` for 3D modalities) and providing `-data_subset` (e.g. `-data_subset "CT|MR|PET"` or `-data_subset "Dermoscopy"`), afterwards use `python extract_evit.py <path_to_work_dir>/medsam_lite_latest.pth models/<model_name>.pth` to extract the weights from the checkpoints
+4. convert all PyTorch models to ONNX by running `python export_onnx.py` after finishing step 1-3 for all models
+5. convert ONNX to OpenVINO IR via `python onnx2openvino.py`
 6. lastly, generate the litemedsam OpenVINO IR artifacts by running `python liteov.py` and move them to the other models via `mv liteov/* openvinomodels/`
 
 You can now use `PerfectMetaOpenVINO.py` for inference.
