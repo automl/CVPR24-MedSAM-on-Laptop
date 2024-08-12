@@ -189,7 +189,7 @@ def medsam_inference(prompt_encoder, mask_decoder, positional_encoding, img_embe
 
 # could also preload all models, but this would make the runtime worse in CVPR24_time_eval.py
 pos_encoding = np.load("openvinomodels/positional_encoding.npy")
-pe = core.compile_model(model="openvinomodels/lite_medsam_prompt_encoder.xml", device_name="CPU")
+pe = core.compile_model(model="openvinomodels/prompt_encoder.xml", device_name="CPU")
 sessions = dict()
 def load_session(name):
     if name not in sessions:
@@ -201,14 +201,14 @@ def load_session(name):
 def filename_to_modelname(filename):
     if filename.startswith("3DBox_PET"): return "3D"
     if filename.startswith("3DBox_MR"): return "3D"
-    if filename.startswith("3DBox_CT"): return "CT"
+    if filename.startswith("3DBox_CT"): return "3D"
 
     if filename.startswith("2DBox_X-Ray"): return "XRay"
     if filename.startswith("2DBox_XRay"): return "XRay"
     if filename.startswith("2DBox_CXR"): return "XRay"
     if filename.startswith("2DBox_XR"): return "XRay"
-    if filename.startswith("2DBox_US"): return "lite_medsam"#"US"
-    if filename.startswith("2DBox_Ultra"): return "lite_medsam"#"US"
+    if filename.startswith("2DBox_US"): return "US"
+    if filename.startswith("2DBox_Ultra"): return "US"
     if filename.startswith("2DBox_Fundus"): return "Fundus"
     if filename.startswith("2DBox_Endoscopy"): return "Endoscopy"
     if filename.startswith("2DBox_Endoscope"): return "Endoscopy"
@@ -219,7 +219,7 @@ def filename_to_modelname(filename):
     if filename.startswith("2DBox_Microscope"): return "Microscopy"
     if filename.startswith("2DBox_Microscopy"): return "Microscopy"
 
-    if filename.startswith("2DBox_CT"): return "CT"
+    if filename.startswith("2DBox_CT"): return "3D"
     if filename.startswith("2DBox_MR"): return "3D"
     if filename.startswith("2DBox_PET"): return "3D"
 
@@ -234,13 +234,13 @@ def filename_to_modelname(filename):
     if "X-Ray" in filename: return "XRay"
     if "XRay" in filename: return "XRay"
     if "PET" in filename: return "3D"
-    if "OCT" in filename: return "OCT" #makesure OCT stays before CT check
+    if "OCT" in filename: return "OCT" #make sure OCT stays before CT check
     if "MR" in filename: return "3D"
     if "Mamm" in filename: return "Mammography"
-    if "US" in filename: return "lite_medsam"#"US"
-    if "CT" in filename: return "CT"
+    if "US" in filename: return "US"
+    if "CT" in filename: return "3D"
     print(filename, "no match found")
-    return "lite_medsam"
+    return "general"
 
 def MedSAM_infer_npz_2D(img_npz_file):
     npz_name = basename(img_npz_file)

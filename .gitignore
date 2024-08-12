@@ -10,8 +10,14 @@
 *.tar.gz
 data/
 models/
+onnxmodels/
+openvinomodels/
 work_dir/LiteMedSAM/lite_medsam.pth
 test_demo/
+test_demo2/
+*.zip
+*.err
+*.pth
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

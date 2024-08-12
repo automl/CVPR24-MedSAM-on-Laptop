@@ -1,0 +1,6 @@
+*
+#!PerfectMetaOpenVINO.py
+!cpp/*
+!predict.sh
+!openvinomodels/*
+# !openvinocache/*

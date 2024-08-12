@@ -8,7 +8,7 @@ import onnxruntime as ort
 from efficientvit.sam_model_zoo import create_sam_model
 
 medsam_lite_model = create_sam_model("l0", False)
-medsam_lite_model.load_state_dict(torch.load("models/CT.pth", map_location='cpu'))
+medsam_lite_model.load_state_dict(torch.load("models/3D.pth", map_location='cpu'))
 medsam_lite_model.prompt_encoder.input_image_size=(256,256)
 medsam_lite_model.to("cpu")
 medsam_lite_model.eval()

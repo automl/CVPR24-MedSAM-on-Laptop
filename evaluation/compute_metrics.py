@@ -53,7 +53,6 @@ def compute_metrics(npz_name):
     npz_gt = np.load(join(gt_dir, npz_name), allow_pickle=True, mmap_mode='r')
     gts = npz_gt['gts']
     segs = npz_seg['segs']
-    print(gts.max(), segs.max())
     if npz_name.startswith('3D'):
         spacing = npz_gt['spacing']
     

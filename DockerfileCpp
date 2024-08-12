@@ -1,0 +1,29 @@
+FROM ubuntu:24.04
+
+ARG PIP_NO_CACHE_DIR=1
+
+RUN groupadd -r user && useradd -m --no-log-init -r -g user user \
+    && apt-get update && apt-get install wget gnupg2 python3 python3-pip python-is-python3 -y --no-install-recommends && apt-get clean && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /opt/app /inputs /outputs \
+    && chown user:user /opt/app /inputs /outputs #&& rm /usr/lib/python3.12/EXTERNALLY-MANAGED
+
+RUN wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB && apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB && echo "deb https://apt.repos.intel.com/openvino/2024 ubuntu24 main" | tee /etc/apt/sources.list.d/intel-openvino-2024.list && apt update && apt-cache search openvino && apt install openvino-2024.3.0 -y &&  wget https://raw.githubusercontent.com/openvinotoolkit/openvino/releases/2024/0/install_build_dependencies.sh && chmod a+x install_build_dependencies.sh && ./install_build_dependencies.sh && wget https://github.com/opencv/opencv/archive/4.9.0.zip && unzip 4.9.0.zip && wget https://raw.githubusercontent.com/hieplpvip/medficientsam/d24c8523ae7b0c32c6befa1547a8e3aecb265b23/cpp/opencv4_cmake_options.txt && cmake \
+    -DENABLE_LTO=ON \
+    -DBUILD_SHARED_LIBS=OFF \
+    -DBUILD_LIBS="core,imgproc"\
+    -DCPU_BASELINE=AVX2 \
+    -DCPU_DISPATCH= \
+    `cat opencv4_cmake_options.txt` \
+    -S opencv-4.9.0 \
+    -B opencv-4.9.0/build
+RUN cmake --build opencv-4.9.0/build --target install --parallel 8
+
+WORKDIR /opt/app
+COPY --chown=user:user . .
+
+RUN cd cpp && cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build && mv build/main .. && cd .. && rm -rf cpp
+# RUN apt-get remove -y wget gnupg2 python3 python3-pip python-is-python3 cmake build-essential ninja-build gcc-multilib g++-multilib scons ccache libllvm17t64
+USER user
+ENV PATH="/home/user/.local/bin:${PATH}"
+
+

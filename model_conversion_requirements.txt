@@ -1,6 +1,0 @@
-numpy==1.24.1
-onnxruntime==1.17.1
-openvino==2024.0.0
-torch==2.1.2
-efficientvit @ git+https://github.com/mit-han-lab/efficientvit.git@94d81573620a95582018d282aac7cc025a2210f4
-opencv-python==4.9.0.80
