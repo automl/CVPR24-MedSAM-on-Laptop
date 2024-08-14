@@ -4,6 +4,17 @@ This repository contains the code for our submission to the CVPR 2024: SEGMENT A
 
 [DAFT: Data-Aware Fine-Tuning of Foundation Models for Efficient and Effective Medical Image Segmentation](https://openreview.net/pdf?id=PObXviy706)
 
+BibTex citation:
+```
+@inproceedings{pfefferle2024daft,
+  title={DAFT: Data-Aware Fine-Tuning of Foundation Models for Efficient and Effective Medical Image Segmentation},
+  author={Pfefferle, Alexander Tobias and Purucker, Lennart and Hutter, Frank},
+  booktitle={CVPR 2024: Segment Anything In Medical Images On Laptop}
+}
+```
+
+The competition was organized by BoWang's Lab at University of Toronto and hosted on [Codabench](https://www.codabench.org/competitions/1847/).
+
 The main branch contains the code of the performance booster challenge that followed the competition. Check out the [finalsubmission branch](https://github.com/automl/CVPR24-MedSAM-on-Laptop/tree/finalsubmission) for our final submission to the competition.
 
 ![inference visualization](imgs/inference.png)
