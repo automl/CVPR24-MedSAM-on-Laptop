@@ -26,8 +26,8 @@ We trained on the [JUWELS Booster](https://en.wikipedia.org/wiki/JUWELS) (4x A10
 ### Dataset and Models
 
 + download [the LiteMedSAM weights](https://drive.google.com/file/d/18Zed-TUTsmr2zc5CHUWd5Tu13nb6vq6z/view) and put them in `work_dir/LiteMedSAM/`, also download [the EfficientViT-SAM l0](https://huggingface.co/han-cai/efficientvit-sam/resolve/main/l0.pt) checkpoint
-+ download the [training data](https://drive.google.com/drive/folders/1khEIdkO0MC_gG5EkQ7COdDS1jge5_XQs) (we only used the data provided by the organizers, no other external allowed datasets)
-+ unzip all files
++ download the [training data](https://drive.google.com/drive/folders/1LCux2WYYQC9Kh3JpX_kONs4pOyd43PjR) (we only used the data provided by the organizers, no other external allowed datasets)
++ `cd train_npz` and unzip all files
 + prepare the new datasets
  + `mv NewTrainingData/totalseg_mr MR`
  + `cd CVPR24-PostChallenge-Train/ && mkdir XRay PET`
