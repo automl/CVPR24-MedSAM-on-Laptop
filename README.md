@@ -6,10 +6,16 @@ This repository contains the code for our submission to the CVPR 2024: SEGMENT A
 
 BibTex citation:
 ```
-@inproceedings{pfefferle2024daft,
-  title={DAFT: Data-Aware Fine-Tuning of Foundation Models for Efficient and Effective Medical Image Segmentation},
-  author={Pfefferle, Alexander Tobias and Purucker, Lennart and Hutter, Frank},
-  booktitle={CVPR 2024: Segment Anything In Medical Images On Laptop}
+@InProceedings{pfefferle2025daft,
+  author="Pfefferle, Alexander and Purucker, Lennart and Hutter, Frank",
+  editor="Ma, Jun and Zhou, Yuyin and Wang, Bo",
+  title="DAFT: Data-Aware Fine-Tuning of Foundation Models for Efficient and Effective Medical Image Segmentation",
+  booktitle="Medical Image Segmentation Foundation Models. CVPR 2024 Challenge: Segment Anything in Medical Images on Laptop",
+  year="2025",
+  publisher="Springer Nature Switzerland",
+  address="Cham",
+  pages="15--38",
+  isbn="978-3-031-81854-7"
 }
 ```
 
@@ -27,6 +33,7 @@ We trained on the [JUWELS Booster](https://en.wikipedia.org/wiki/JUWELS) (4x A10
 
 + download [the LiteMedSAM weights](https://drive.google.com/file/d/18Zed-TUTsmr2zc5CHUWd5Tu13nb6vq6z/view) and put them in `work_dir/LiteMedSAM/`, also download [the EfficientViT-SAM l0](https://huggingface.co/han-cai/efficientvit-sam/resolve/main/l0.pt) checkpoint
 + download the [training data](https://drive.google.com/drive/folders/1LCux2WYYQC9Kh3JpX_kONs4pOyd43PjR) (we only used the data provided by the organizers, no other external allowed datasets)
++ download the test data to `CVPR24-MedSAMLaptopData` and unzip it
 + `cd train_npz` and unzip all files
 + prepare the new datasets
  + `mv NewTrainingData/totalseg_mr MR`
@@ -79,3 +86,9 @@ Run `python evaluation/compute_metrics.py -s test_demo/segs -g test_demo/gts -cs
 ### Docker submission
 
 To create the docker you can use `./build_docker_cpp.sh` (or `./build_docker_openvino.sh` for the python version) and `docker save automlfreiburg | gzip -c > automlfreiburg.tar.gz` to save it.
+
+### Meta Model Experiments
+
++ run `python metadataset.py` to create the meta dataset
++ run `python metaag.py` to train autogluon on the meta dataset and evaluate it on the test set
++ run `python distributionshift.py` to check for a distribution shift between the training and test set
