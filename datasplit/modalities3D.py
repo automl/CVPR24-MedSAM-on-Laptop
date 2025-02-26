@@ -17,7 +17,7 @@ modalities={
     "Microscopy":r"^Microscopy",
     "OCT":r"^OCT",
     "US":r"^US",
-    "XRay":r"^XRay",
+    "XRay":r"^XRay",# bug! should have been r"^(XRay|X-Ray)",
     "3D":r"^(CT|MR|PET)"
 }
 
