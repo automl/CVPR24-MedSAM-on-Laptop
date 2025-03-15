@@ -7,15 +7,16 @@ This repository contains the code for our submission to the CVPR 2024: SEGMENT A
 BibTex citation:
 ```
 @InProceedings{pfefferle2025daft,
-  author="Pfefferle, Alexander and Purucker, Lennart and Hutter, Frank",
-  editor="Ma, Jun and Zhou, Yuyin and Wang, Bo",
-  title="DAFT: Data-Aware Fine-Tuning of Foundation Models for Efficient and Effective Medical Image Segmentation",
-  booktitle="Medical Image Segmentation Foundation Models. CVPR 2024 Challenge: Segment Anything in Medical Images on Laptop",
-  year="2025",
-  publisher="Springer Nature Switzerland",
-  address="Cham",
-  pages="15--38",
-  isbn="978-3-031-81854-7"
+  author={Pfefferle, Alexander and Purucker, Lennart and Hutter, Frank},
+  editor={Ma, Jun and Zhou, Yuyin and Wang, Bo},
+  title={DAFT: Data-Aware Fine-Tuning of Foundation Models for Efficient and Effective Medical Image Segmentation},
+  booktitle={Medical Image Segmentation Foundation Models. CVPR 2024 Challenge: Segment Anything in Medical Images on Laptop},
+  year={2025},
+  publisher={Springer Nature Switzerland},
+  address={Cham},
+  pages={15--38},
+  isbn={978-3-031-81854-7},
+  doi={10.1007/978-3-031-81854-7_2}
 }
 ```
 
